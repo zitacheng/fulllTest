@@ -39,14 +39,14 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
   const [selectAll, setSelectAll] = useState(false);
-  const [users, setUsers] = useState<[UserProps] | undefined>();
+  const [users, setUsers] = useState<UserProps[] | undefined>();
 
 
   const setUserChecked = (user: UserProps) => {
     let idx = users?.findIndex((el) => el.id === user.id);
     
       if (idx != undefined  && idx >= 0 && users) {
-        const newArr: [UserProps] = [...users];
+        const newArr: UserProps[] = [...users];
         //Uncheck Select All
         if (user.checked == true && selectAll == true) 
         {
@@ -56,6 +56,41 @@ function App(): React.JSX.Element {
           newArr[idx].checked = !user.checked;
           setUsers(newArr);
         }
+    }
+  }
+
+  const deleteUser = () => {
+    if (users != undefined) {
+
+      const newArr: UserProps[] = [...users];
+
+      for (var i = newArr.length - 1; i >= 0; i--) {
+        if (newArr[i].checked == true) { 
+            newArr[i].checked = false;
+            newArr.splice(i, 1);
+        }
+        setUsers(newArr);
+        if (newArr.length <= 0 && selectAll == true)
+          setSelectAll(false);
+      }
+    }
+  }
+
+  const duplicateUser = () => {
+    if (users != undefined) {
+      let newArr: UserProps[] = [...users];
+      let list = [];
+
+      for (var i = newArr.length - 1; i >= 0; i--) {
+        if (newArr[i].checked == true) { 
+            list.push(newArr[i]);
+        }
+        if (list.length > 0) {
+          newArr = newArr.concat(list);
+          setUsers(newArr);
+        }
+        
+      }
     }
   }
 
@@ -129,24 +164,24 @@ function App(): React.JSX.Element {
         value={search}
       />
       <View style={styles.menu}>
-        <TouchableOpacity style={(selectAll == true || users?.filter(x => x.checked  == true).length == users?.length) ? styles.checked : styles.uncheck} onPress={() => {
+        <TouchableOpacity style={(selectAll == true || (users && users?.filter(x => x.checked  == true).length == users?.length && users?.length > 0)) ? styles.checked : styles.uncheck} onPress={() => {
           setAllCheck();
         }}> 
           {
-          (selectAll == true || users?.filter(x => x.checked  == true).length == users?.length) &&
+          (selectAll == true ||  (users && users?.filter(x => x.checked  == true).length == users?.length && users?.length > 0)) &&
               <View
                   style={styles.line}
               />
           }
           </TouchableOpacity>
           <Text style={styles.txt}>{(users?.filter(x => x.checked  == true).length == users?.length) ? users?.length : users?.filter(x => x.checked  == true).length} Elements selected</Text>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {duplicateUser()}}>
             <Image
                 style={styles.menuImg}
                 source={require('./assets/copy.png')}
             />
           </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {deleteUser()}}>
             <Image
                 style={styles.menuImg}
                 source={require('./assets/delete.png')}
