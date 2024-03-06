@@ -61,7 +61,6 @@ function App(): React.JSX.Element {
 
   const deleteUser = () => {
     if (users != undefined) {
-
       const newArr: UserProps[] = [...users];
 
       for (var i = newArr.length - 1; i >= 0; i--) {
@@ -81,15 +80,14 @@ function App(): React.JSX.Element {
       let newArr: UserProps[] = [...users];
       let list = [];
 
-      for (var i = newArr.length - 1; i >= 0; i--) {
+      for (var i = 0; i < newArr.length; i++) {
         if (newArr[i].checked == true) { 
             list.push(newArr[i]);
         }
-        if (list.length > 0) {
-          newArr = newArr.concat(list);
-          setUsers(newArr);
-        }
-        
+      }
+      if (list.length > 0) {
+        newArr = newArr.concat(list);
+        setUsers(newArr);
       }
     }
   }
@@ -148,7 +146,7 @@ function App(): React.JSX.Element {
   }, [search])
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
       />
@@ -188,7 +186,7 @@ function App(): React.JSX.Element {
             />
           </TouchableOpacity>
         </View>
-      <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
+      <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1}}>
         {
           users?.map((user: UserProps, id) => {
             return (
@@ -201,21 +199,8 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    flex: 1,
   },
   header: {
     height: 64,
@@ -243,6 +228,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     padding: 16,
+    flex: 1,
   },
   menu: {
     flexDirection: 'row',
