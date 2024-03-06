@@ -38,23 +38,36 @@ interface UserProps {
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
+  const [selectAll, setSelectAll] = useState(false);
   const [users, setUsers] = useState<[UserProps] | undefined>();
 
 
   const setUserChecked = (user: UserProps) => {
-    console.log("useruser", user)
     let idx = users?.findIndex((el) => el.id === user.id);
-    console.log("idx", idx)
-
+    
       if (idx != undefined  && idx >= 0 && users) {
         const newArr: [UserProps] = [...users];
+        //Uncheck Select All
+        if (user.checked == true && selectAll == true) 
+        {
+          setSelectAll(false);
+        }
         if (newArr) {
           newArr[idx].checked = !user.checked;
           setUsers(newArr);
         }
     }
   }
-  //402 rate limi api
+
+  const setAllCheck = () => {
+    if (users != undefined) {
+      for (const element of users) {
+        element.checked = !selectAll;
+      }
+    }
+    setSelectAll(!selectAll);
+  }
+
   const getUser = (user: string) => {
     console.log("user ", user)
       fetch('https://api.github.com/search/users?q=' + user)
@@ -115,11 +128,36 @@ function App(): React.JSX.Element {
         auto-correct={false}
         value={search}
       />
+      <View style={styles.menu}>
+        <TouchableOpacity style={(selectAll == true || users?.filter(x => x.checked  == true).length == users?.length) ? styles.checked : styles.uncheck} onPress={() => {
+          setAllCheck();
+        }}> 
+          {
+          (selectAll == true || users?.filter(x => x.checked  == true).length == users?.length) &&
+              <View
+                  style={styles.line}
+              />
+          }
+          </TouchableOpacity>
+          <Text style={styles.txt}>{(users?.filter(x => x.checked  == true).length == users?.length) ? users?.length : users?.filter(x => x.checked  == true).length} Elements selected</Text>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+            <Image
+                style={styles.menuImg}
+                source={require('./assets/copy.png')}
+            />
+          </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => {}}>
+            <Image
+                style={styles.menuImg}
+                source={require('./assets/delete.png')}
+            />
+          </TouchableOpacity>
+        </View>
       <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
         {
-          users?.map((user: UserProps) => {
+          users?.map((user: UserProps, id) => {
             return (
-             <Card user={user} setUserChecked={setUserChecked} />
+             <Card user={user} setUserChecked={setUserChecked} key={id} />
             )
          })}
       </ScrollView>
@@ -171,6 +209,54 @@ const styles = StyleSheet.create({
   scroll: {
     padding: 16,
   },
+  menu: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 40,
+    alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  uncheck: {
+    borderWidth: 3,
+    borderColor: 'black',
+    borderRadius: 5,
+    width: 20,
+    height: 20,
+    position: 'relative'
+  },
+  checked: {
+    borderWidth: 3,
+    borderColor: 'black',
+    borderRadius: 5,
+    width: 20,
+    height: 20,
+    backgroundColor: '#00a1ff',
+    position: 'relative'
+  },
+  menuItem: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  menuImg: {
+    width: '100%',
+    height: '100%',
+  },
+  txt: {
+    marginRight: 'auto',
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: '500'
+  },
+  line: {
+    position: 'absolute',
+    height: 3,
+    width: 16,
+    backgroundColor: 'black',
+    top: 6,
+    left: 0,
+  }
 });
 
 export default App;

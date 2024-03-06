@@ -13,7 +13,6 @@ interface CardProps {
   }
 
 export const Card = (props: CardProps) => {
-    console.log("props ", props)
   return (
     <View style={styles.card}>
         <View style={styles.cardHead}>
