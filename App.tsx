@@ -14,10 +14,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-interface userProps {
+import {Card} from './components/Card';
+
+interface UserProps {
   login: string,
   id: number,
-  avatar_url: string
+  avatar_url: string,
+  checked: boolean
 }
 
 // interface CustomResponseHeaders extends Headers {
@@ -35,8 +38,22 @@ interface userProps {
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
-  const [users, setUsers] = useState<[userProps] | undefined>();
+  const [users, setUsers] = useState<[UserProps] | undefined>();
 
+
+  const setUserChecked = (user: UserProps) => {
+    console.log("useruser", user)
+    let idx = users?.findIndex((el) => el.id === user.id);
+    console.log("idx", idx)
+
+      if (idx != undefined  && idx >= 0 && users) {
+        const newArr: [UserProps] = [...users];
+        if (newArr) {
+          newArr[idx].checked = !user.checked;
+          setUsers(newArr);
+        }
+    }
+  }
   //402 rate limi api
   const getUser = (user: string) => {
     console.log("user ", user)
@@ -57,9 +74,9 @@ function App(): React.JSX.Element {
       })
       .then(response => response.json())
       .then(json => {
-        console.log("jsonnFWWFFWEEFEFW ", json)
+        // console.log("jsonnFWWFFWEEFEFW ", json)
         // console.log("ITEM ", json.status)
-        console.log("ITEM ", json.items);
+        // console.log("ITEM ", json.items);
         setUsers(json?.items);
         if (json.items?.length == 0 && search)
           Alert.alert('Not found', 'No user has this username.');
@@ -100,24 +117,9 @@ function App(): React.JSX.Element {
       />
       <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
         {
-          users?.map((user: userProps) => {
+          users?.map((user: UserProps) => {
             return (
-              <View style={styles.card}>
-                <View style={styles.cardHead}>
-                  {/* <View style={styles.imgBg} /> */}
-                  <Image
-                    style={styles.imgBg}
-                    source={{
-                      uri: user.avatar_url,
-                    }}
-                  />
-                  <Text style={styles.headTxt}>{user.id}</Text>
-                  <Text style={styles.headTxt}>{user.login}</Text>
-                </View>
-                <TouchableOpacity style={styles.btn}>
-                  <Text style={styles.btnTxt}>View Profile</Text>
-                </TouchableOpacity>
-              </View>
+             <Card user={user} setUserChecked={setUserChecked} />
             )
          })}
       </ScrollView>
@@ -166,50 +168,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 6,
   },
-  card: {
-    width: '100%',
-    height: 300,
-    backgroundColor: '#d5d5d5',
-    borderRadius: 30,
-    shadowColor: '#888888',
-    shadowOffset: {width: 4, height: 4},
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    marginBottom: 16,
-    flexDirection: 'column',
-  },
   scroll: {
     padding: 16,
   },
-  cardHead: {
-    alignItems: 'center',
-    paddingTop: 16,
-  },
-  btn: {
-    backgroundColor: '#04a1fe',
-    alignItems: 'center',
-    marginTop: 'auto',
-    marginBottom: 16,
-    padding: 16,
-    width: '70%',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    borderRadius: 10,
-  },
-  imgBg: {
-    backgroundColor: '#0dc9b7',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
-  },
-  btnTxt: {
-    fontSize: 16
-  },
-  headTxt: {
-    fontSize: 16,
-    fontWeight: '600'
-  }
 });
 
 export default App;
