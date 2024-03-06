@@ -1,11 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
+import React, {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -15,82 +8,59 @@ import {
   Text,
   useColorScheme,
   View,
+  TextInput,
+  Touchable,
+  TouchableOpacity
 } from 'react-native';
 
 import {
   Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [search, setSearch] = useState('');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+      <View style={styles.header}>
+        <Text style={styles.title}>Github Search</Text>
+      </View>
+      <TextInput
+        style={styles.input}
+        onChangeText={setSearch}
+        placeholder='Search Input'
+        value={search}
+      />
+      <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
+          <View style={styles.card}>
+            <View style={styles.cardHead}>
+              <View style={styles.imgBg} />
+              <Text style={styles.headTxt}>ID</Text>
+              <Text style={styles.headTxt}>LOGIN</Text>
+            </View>
+            <TouchableOpacity style={styles.btn}>
+              <Text style={styles.btnTxt}>View Profile</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.card}>
+            <View style={styles.cardHead}>
+              <View style={styles.imgBg} />
+              <Text style={styles.headTxt}>ID</Text>
+              <Text style={styles.headTxt}>LOGIN</Text>
+            </View>
+            <TouchableOpacity style={styles.btn}>
+              <Text style={styles.btnTxt}>View Profile</Text>
+            </TouchableOpacity>
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -113,6 +83,74 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  header: {
+    height: 64,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#929292',
+  },
+  title: {
+    alignSelf: 'center',
+    fontSize: 20,
+    width: '100%',
+    textAlign: 'center',
+    fontWeight: '500'
+  },
+  input: {
+    backgroundColor: '#d5d5d5',
+    marginLeft: 16,
+    marginRight: 16,
+    marginBottom: 24,
+    marginTop: 24,
+    fontSize: 20,
+    padding: 10,
+    borderRadius: 6,
+  },
+  card: {
+    width: '100%',
+    height: 300,
+    backgroundColor: '#d5d5d5',
+    borderRadius: 30,
+    shadowColor: '#888888',
+    shadowOffset: {width: 4, height: 4},
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
+    marginBottom: 16,
+    flexDirection: 'column',
+  },
+  scroll: {
+    padding: 16,
+  },
+  cardHead: {
+    alignItems: 'center',
+    paddingTop: 16,
+  },
+  btn: {
+    backgroundColor: '#04a1fe',
+    alignItems: 'center',
+    marginTop: 'auto',
+    marginBottom: 16,
+    padding: 16,
+    width: '70%',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    borderRadius: 10,
+  },
+  imgBg: {
+    backgroundColor: '#0dc9b7',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  btnTxt: {
+    fontSize: 16
+  },
+  headTxt: {
+    fontSize: 16,
+    fontWeight: '600'
+  }
 });
 
 export default App;
