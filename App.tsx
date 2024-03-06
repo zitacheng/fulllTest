@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -66,6 +66,14 @@ function App(): React.JSX.Element {
       });
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getUser(search)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [search])
+
   return (
     <SafeAreaView>
       <StatusBar
@@ -76,8 +84,10 @@ function App(): React.JSX.Element {
       </View>
       <TextInput
         style={styles.input}
-        onChangeText={(val) => {setSearch(val);getUser(val)}}
+        onChangeText={(val) => {setSearch(val);}}
         placeholder='Search Input'
+        autoCapitalize={'none'}
+        auto-correct={false}
         value={search}
       />
       <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
