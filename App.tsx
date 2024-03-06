@@ -9,22 +9,34 @@ import {
   useColorScheme,
   View,
   TextInput,
-  Touchable,
+  Image,
   TouchableOpacity
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+interface userProps {
+  login: string,
+  id: number,
+  avatar_url: string
+}
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
+  const [users, setUsers] = useState<[userProps]>();
 
+
+  //402 rate limi api
+  const getUser = (user: string) => {
+    console.log("user ", user)
+      fetch('https://api.github.com/search/users?q=' + user)
+      .then(response => response.json())
+      .then(json => {
+         setUsers(json?.items)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   return (
     <SafeAreaView>
@@ -36,31 +48,32 @@ function App(): React.JSX.Element {
       </View>
       <TextInput
         style={styles.input}
-        onChangeText={setSearch}
+        onChangeText={(val) => {setSearch(val);getUser(val)}}
         placeholder='Search Input'
         value={search}
       />
       <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic">
-          <View style={styles.card}>
-            <View style={styles.cardHead}>
-              <View style={styles.imgBg} />
-              <Text style={styles.headTxt}>ID</Text>
-              <Text style={styles.headTxt}>LOGIN</Text>
-            </View>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.btnTxt}>View Profile</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.card}>
-            <View style={styles.cardHead}>
-              <View style={styles.imgBg} />
-              <Text style={styles.headTxt}>ID</Text>
-              <Text style={styles.headTxt}>LOGIN</Text>
-            </View>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.btnTxt}>View Profile</Text>
-            </TouchableOpacity>
-          </View>
+        {
+          users?.map((user: userProps) => {
+            return (
+              <View style={styles.card}>
+                <View style={styles.cardHead}>
+                  {/* <View style={styles.imgBg} /> */}
+                  <Image
+                    style={styles.imgBg}
+                    source={{
+                      uri: user.avatar_url,
+                    }}
+                  />
+                  <Text style={styles.headTxt}>{user.id}</Text>
+                  <Text style={styles.headTxt}>{user.login}</Text>
+                </View>
+                <TouchableOpacity style={styles.btn}>
+                  <Text style={styles.btnTxt}>View Profile</Text>
+                </TouchableOpacity>
+              </View>
+            )
+         })}
       </ScrollView>
     </SafeAreaView>
   );
