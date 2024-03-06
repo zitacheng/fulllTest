@@ -35,7 +35,7 @@ interface userProps {
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
-  const [users, setUsers] = useState<[userProps]>();
+  const [users, setUsers] = useState<[userProps] | undefined>();
 
   //402 rate limi api
   const getUser = (user: string) => {
@@ -47,18 +47,22 @@ function App(): React.JSX.Element {
         // console.log("MAP", response.headers.map['x-ratelimit-reset'])
         // console.log("MAP", response.headers.map['x-ratelimit-remaining'])
         // console.log("MAP", response.headers.map['x-ratelimit-used'])
-        if (response.status == 200)
+        // if (response.status == 200)
+        //   return response; 
+        // else
+        //   throw response.status;
           return response; 
-        else
-          throw response.status;
+
 
       })
       .then(response => response.json())
       .then(json => {
-        // console.log("jsonnFWWFFWEEFEFW ", json)
+        console.log("jsonnFWWFFWEEFEFW ", json)
         // console.log("ITEM ", json.status)
-        // console.log("ITEM ", json.items)
-         setUsers(json?.items)
+        console.log("ITEM ", json.items);
+        setUsers(json?.items);
+        if (json.items?.length == 0 && search)
+          Alert.alert('Not found', 'No user has this username.');
       })
       .catch(error => {
         Alert.alert('Error on the request', 'You have exceed the rate limit, please try later');
@@ -68,7 +72,11 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      getUser(search)
+      if (search) {
+        getUser(search);
+      }
+      else
+        setUsers(undefined);
     }, 500)
 
     return () => clearTimeout(timer)
