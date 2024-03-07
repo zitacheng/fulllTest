@@ -65,13 +65,12 @@ function App(): React.JSX.Element {
 
       for (var i = newArr.length - 1; i >= 0; i--) {
         if (newArr[i].checked == true) { 
-            newArr[i].checked = false;
             newArr.splice(i, 1);
         }
-        setUsers(newArr);
-        if (newArr.length <= 0 && selectAll == true)
-          setSelectAll(false);
       }
+      setUsers(newArr);
+      if (newArr.length <= 0 && selectAll == true)
+        setSelectAll(false);
     }
   }
 
@@ -82,11 +81,12 @@ function App(): React.JSX.Element {
 
       for (var i = 0; i < newArr.length; i++) {
         if (newArr[i].checked == true) { 
-            list.push(newArr[i]);
+            list.push({login: newArr[i].login + ' duplicate', id: newArr[i].id, avatar_url: newArr[i].avatar_url, checked: true});
         }
       }
       if (list.length > 0) {
         newArr = newArr.concat(list);
+        console.log("neww ARR ", newArr)
         setUsers(newArr);
       }
     }
@@ -99,6 +99,10 @@ function App(): React.JSX.Element {
       }
     }
     setSelectAll(!selectAll);
+  }
+
+  const countSelected = () => {
+    return (users?.filter(x => x.checked  == true).length)
   }
 
   const getUser = (user: string) => {
@@ -166,13 +170,13 @@ function App(): React.JSX.Element {
           setAllCheck();
         }}> 
           {
-          (selectAll == true ||  (users && users?.filter(x => x.checked  == true).length == users?.length && users?.length > 0)) &&
+          (selectAll == true ||  (users != undefined && countSelected() == users?.length && users?.length > 0)) &&
               <View
                   style={styles.line}
               />
           }
           </TouchableOpacity>
-          <Text style={styles.txt}>{(users?.filter(x => x.checked  == true).length == users?.length) ? users?.length : users?.filter(x => x.checked  == true).length} Elements selected</Text>
+          <Text style={styles.txt}>{countSelected()} Elements selected</Text>
         <TouchableOpacity style={styles.menuItem} onPress={() => {duplicateUser()}}>
             <Image
                 style={styles.menuImg}
