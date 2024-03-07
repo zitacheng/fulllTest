@@ -1,14 +1,8 @@
 import React, {useEffect, SetStateAction} from 'react';
 import {StyleSheet, TextInput} from 'react-native';
-
-interface UserProps {
-    login: string,
-    id: number,
-    avatar_url: string,
-    checked: boolean,
-  }
+import { UserProps } from '../types/AppTypes';
   
-interface InputProps {
+  type InputProps = {
     setUsers: React.Dispatch<SetStateAction<UserProps[]>>,
     getUser: Function,
     search: string

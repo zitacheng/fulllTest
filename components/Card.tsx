@@ -1,13 +1,8 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View, Image, Text} from 'react-native';
+import { UserProps } from '../types/AppTypes';
 
-interface UserProps {
-    login: string,
-    id: number,
-    avatar_url: string,
-    checked: boolean,
-  }
-interface CardProps {
+type CardProps = {
     user: UserProps,
     setUserChecked: Function,
     edit: boolean

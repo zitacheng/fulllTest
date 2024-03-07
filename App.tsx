@@ -16,13 +16,7 @@ import {Card} from './components/Card';
 import {InputUser} from './components/InputUser';
 import {Header} from './components/Header';
 import {Menu} from './components/Menu';
-
-interface UserProps {
-  login: string,
-  id: number,
-  avatar_url: string,
-  checked: boolean
-}
+import { UserProps } from './types/AppTypes';
 
 // interface CustomResponseHeaders extends Headers {
 //   map: {

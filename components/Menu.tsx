@@ -1,4 +1,4 @@
-import React, {useState, SetStateAction} from 'react';
+import React, {SetStateAction} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 
 interface UserProps {
@@ -8,7 +8,7 @@ interface UserProps {
     checked: boolean,
   }
 
-interface MenuProps {
+type MenuProps = {
     edit: boolean,
     setEdit: React.Dispatch<SetStateAction<boolean>>,
     selectAll: boolean,
