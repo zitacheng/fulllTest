@@ -39,6 +39,7 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState('');
   const [selectAll, setSelectAll] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [users, setUsers] = useState<UserProps[] | undefined>();
 
 
@@ -165,7 +166,12 @@ function App(): React.JSX.Element {
         auto-correct={false}
         value={search}
       />
-      <View style={styles.menu}>
+      <TouchableOpacity onPress={() => {setEdit(!edit)}} style={styles.smBtn}>
+        <Text>{edit == true ? 'Cancel' : 'Edit'}</Text>
+      </TouchableOpacity>
+      {
+        edit == true &&
+        <View style={styles.menu}>
         <TouchableOpacity style={(selectAll == true || (users && users?.filter(x => x.checked  == true).length == users?.length && users?.length > 0)) ? styles.checked : styles.uncheck} onPress={() => {
           setAllCheck();
         }}> 
@@ -190,11 +196,12 @@ function App(): React.JSX.Element {
             />
           </TouchableOpacity>
         </View>
+      }
       <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1}}>
         {
           users?.map((user: UserProps, id) => {
             return (
-             <Card user={user} setUserChecked={setUserChecked} key={id} />
+             <Card user={user} edit={edit} setUserChecked={setUserChecked} key={id} />
             )
          })}
       </ScrollView>
@@ -281,6 +288,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     top: 6,
     left: 0,
+  },
+  smBtn: {
+    backgroundColor: '#04a1fe',
+    alignSelf: 'flex-start',
+    padding: 8,
+    borderRadius: 18,
+    marginLeft: 16,
   }
 });
 

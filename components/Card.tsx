@@ -9,7 +9,8 @@ interface UserProps {
   }
 interface CardProps {
     user: UserProps,
-    setUserChecked: Function
+    setUserChecked: Function,
+    edit: boolean
   }
 
 export const Card = (props: CardProps) => {
@@ -28,7 +29,9 @@ export const Card = (props: CardProps) => {
         <TouchableOpacity style={styles.btn}>
             <Text style={styles.btnTxt}>View Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={props?.user?.checked == true ? styles.check : styles.uncheck} onPress={() => {
+        {
+            props?.edit == true &&
+            <TouchableOpacity style={props?.user?.checked == true ? styles.check : styles.uncheck} onPress={() => {
                 props?.setUserChecked(props.user);
             }}>
             {
@@ -39,6 +42,8 @@ export const Card = (props: CardProps) => {
                 />
             }
         </TouchableOpacity>
+
+        }
     </View>
   );
 };
