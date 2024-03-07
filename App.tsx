@@ -11,7 +11,8 @@ import {
   TextInput,
   Image,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  VirtualizedList
 } from 'react-native';
 
 import {Card} from './components/Card';
@@ -40,7 +41,7 @@ function App(): React.JSX.Element {
   const [search, setSearch] = useState('');
   const [selectAll, setSelectAll] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [users, setUsers] = useState<UserProps[] | undefined>();
+  const [users, setUsers] = useState<UserProps[]>([]);
 
 
   const setUserChecked = (user: UserProps) => {
@@ -87,7 +88,6 @@ function App(): React.JSX.Element {
       }
       if (list.length > 0) {
         newArr = newArr.concat(list);
-        console.log("neww ARR ", newArr)
         setUsers(newArr);
       }
     }
@@ -144,11 +144,18 @@ function App(): React.JSX.Element {
         getUser(search);
       }
       else
-        setUsers(undefined);
+        setUsers([]);
     }, 500)
 
     return () => clearTimeout(timer)
   }, [search])
+
+  const getItem = (_data: unknown, index: number) : UserProps => {
+      return (users[index])
+  }
+
+  const getItemCount = (_data: unknown) => users.length;
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -172,24 +179,22 @@ function App(): React.JSX.Element {
       {
         edit == true &&
         <View style={styles.menu}>
-        <TouchableOpacity style={(selectAll == true || (users && users?.filter(x => x.checked  == true).length == users?.length && users?.length > 0)) ? styles.checked : styles.uncheck} onPress={() => {
-          setAllCheck();
-        }}> 
+          <TouchableOpacity style={(selectAll == true || (users && countSelected() == users?.length && users?.length > 0)) ? styles.checked : styles.uncheck} onPress={() => {
+            setAllCheck();
+          }}> 
           {
           (selectAll == true ||  (users != undefined && countSelected() == users?.length && users?.length > 0)) &&
-              <View
-                  style={styles.line}
-              />
+              <View style={styles.line}  />
           }
           </TouchableOpacity>
           <Text style={styles.txt}>{countSelected()} Elements selected</Text>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {duplicateUser()}}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {duplicateUser()}}>
             <Image
                 style={styles.menuImg}
                 source={require('./assets/copy.png')}
             />
           </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => {deleteUser()}}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {deleteUser()}}>
             <Image
                 style={styles.menuImg}
                 source={require('./assets/delete.png')}
@@ -197,14 +202,13 @@ function App(): React.JSX.Element {
           </TouchableOpacity>
         </View>
       }
-      <ScrollView style={styles.scroll} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1}}>
-        {
-          users?.map((user: UserProps, id) => {
-            return (
-             <Card user={user} edit={edit} setUserChecked={setUserChecked} key={id} />
-            )
-         })}
-      </ScrollView>
+      <VirtualizedList
+        initialNumToRender={2}
+        renderItem={({item}) =>  <Card user={item} edit={edit} setUserChecked={setUserChecked} />}
+        keyExtractor={item => item.id.toString()}
+        getItemCount={getItemCount}
+        getItem={getItem}
+      /> 
     </SafeAreaView>
   );
 }
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     alignItems: 'center',
-    paddingLeft: 10,
+    paddingLeft: 20,
     paddingRight: 10,
   },
   uncheck: {
@@ -295,6 +299,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 18,
     marginLeft: 16,
+    marginBottom: 5,
   }
 });
 

@@ -50,7 +50,7 @@ export const Card = (props: CardProps) => {
 
 const styles = StyleSheet.create({
     card: {
-        width: '100%',
+        flex: 1,
         height: 300,
         backgroundColor: '#d5d5d5',
         borderRadius: 30,
@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         marginBottom: 16,
         flexDirection: 'column',
-        position: 'relative'
+        position: 'relative',
+        marginLeft: 16,
+        marginRight: 16,
     },
     cardHead: {
         alignItems: 'center',
