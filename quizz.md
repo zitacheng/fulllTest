@@ -5,7 +5,9 @@
      <Text>World</Text>
    </View>
  </ScrollView>
+
 2.Which reducer code do not follow best practices? A - push is a function so it should be called with () not []
+
 3.Which reducer code is correct? A - 
 ```
 export function userSetData(
@@ -47,4 +49,5 @@ async function registerUser(name: string, age: number): Promise<Result> {
 9.What is the main difference between queries and mutations in GraphQL?
 Queries are used to fetch data from the backend and do not modify the data on the server;
 Mutations are used to create, edit or delete data on the backend.
+
 10.What does not permit to interact with servers within React Native project? C - SwiftUI. it is a library from apple to build iOS native apps.
