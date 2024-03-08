@@ -25,6 +25,7 @@ test('renders all elements correctly', () => {
 test('testing input with 1 result', async () => {
   render(<App />);
 
+  // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
@@ -43,6 +44,8 @@ test('testing input with 10 result', async () => {
   for (let i = 0; i < 10; i++) {
     items.push({id: i, avatar_url: '', login: '', checked: false})
   }
+
+  // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
@@ -61,6 +64,8 @@ test('testing input with 1 result', async () => {
   for (let i = 0; i < 1; i++) {
     items.push({id: i, avatar_url: '', login: '', checked: false})
   }
+
+  // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
@@ -79,6 +84,8 @@ test('test pressing edit and checked button', async () => {
   for (let i = 0; i < 5; i++) {
     items.push({id: i, avatar_url: '', login: '', checked: false})
   }
+
+  // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
@@ -105,6 +112,8 @@ test('test deleting users', async () => {
   for (let i = 0; i < 5; i++) {
     items.push({id: i, avatar_url: '', login: '', checked: false})
   }
+
+  // @ts-ignore
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
