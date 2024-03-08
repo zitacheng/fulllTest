@@ -1,10 +1,12 @@
 1.What would return the following code? B - 
+```
 <ScrollView>
    <View>
      <Text>Hello</Text>
      <Text>World</Text>
    </View>
  </ScrollView>
+```
 
 2.Which reducer code do not follow best practices? A - push is a function so it should be called with () not []
 
