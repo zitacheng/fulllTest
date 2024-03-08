@@ -38,6 +38,7 @@ function App(): React.JSX.Element {
     }
   }
 
+
   const getUser = (user: string) => {
       fetch('https://api.github.com/search/users?q=' + user)
       .then((response) => {
