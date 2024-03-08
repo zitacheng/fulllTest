@@ -10,6 +10,7 @@ type InputProps = {
 export const InputUser = (props: InputProps) => {
   const [search, setSearch] = useState<string>('');
 
+  //This is for waiting the user to stop typing in the input before fetching data from github
   useEffect(() => {
     const timer = setTimeout(() => {
       if (search) {

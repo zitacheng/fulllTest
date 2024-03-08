@@ -18,6 +18,8 @@ type MenuProps = {
 };
 
 export const Menu = (props: MenuProps) => {
+
+  //Delete selected users
   const deleteUser = () => {
     if (props?.users != undefined) {
       const newArr: UserProps[] = [...props?.users];
@@ -33,12 +35,14 @@ export const Menu = (props: MenuProps) => {
     }
   };
 
+  //duplicate selected users
   const duplicateUser = () => {
     if (props?.users != undefined) {
       let newArr: UserProps[] = [...props?.users];
       let list = [];
 
       for (var i = 0; i < newArr.length; i++) {
+        //Copy the user and create a random ID
         if (newArr[i].checked == true) {
           list.push({
             login: newArr[i].login + ' duplicate',
@@ -55,6 +59,7 @@ export const Menu = (props: MenuProps) => {
     }
   };
 
+  //Select all the users
   const setAllCheck = () => {
     if (props?.users != undefined) {
       for (const element of props?.users) {
@@ -64,6 +69,7 @@ export const Menu = (props: MenuProps) => {
     props?.setSelectAll(!props?.selectAll);
   };
 
+  //Count total users
   const countSelected = () => {
     return props?.users?.filter(x => x.checked == true).length;
   };

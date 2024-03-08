@@ -3,12 +3,8 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
   useColorScheme,
-  View,
-  Image,
   Alert,
-  TouchableOpacity,
   VirtualizedList,
 } from 'react-native';
 
@@ -17,18 +13,6 @@ import {InputUser} from './components/InputUser';
 import {Header} from './components/Header';
 import {Menu} from './components/Menu';
 import { UserProps } from './types/AppTypes';
-
-// interface CustomResponseHeaders extends Headers {
-//   map: {
-//     'x-ratelimit-reset'?: string;
-//     'x-ratelimit-remaining'?: string;
-//     'x-ratelimit-used'?: string;
-//   }
-// }
-
-// interface CustomResponse extends Response {
-//   headers: CustomResponseHeaders;
-// }
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -55,30 +39,22 @@ function App(): React.JSX.Element {
   }
 
   const getUser = (user: string) => {
-    console.log("user ", user)
       fetch('https://api.github.com/search/users?q=' + user)
       .then((response) => {
-        console.log("response", response.status)
-        // console.log("response", response)
-        // console.log("MAP", response.headers.map['x-ratelimit-reset'])
-        // console.log("MAP", response.headers.map['x-ratelimit-remaining'])
-        // console.log("MAP", response.headers.map['x-ratelimit-used'])
+        //Check is request was successful with 200 code
         if (response.status == 200)
           return response; 
         else
           throw response.status;
-          // return response; 
       })
       .then(response => response.json())
       .then(json => {
         setUsers(json?.items);
-        
         if (json.items?.length == 0)
           Alert.alert('Not found', 'No user has this username.');
       })
       .catch(error => {
         Alert.alert('Error on the request', 'You have exceed the rate limit, please try later');
-        console.error(error);
       });
   };
 
@@ -86,6 +62,7 @@ function App(): React.JSX.Element {
     return users[index];
   };
 
+  //total of the user list
   const getItemCount = (_data: unknown) => users.length;
 
   return (
