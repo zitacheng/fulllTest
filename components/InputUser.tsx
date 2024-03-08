@@ -1,36 +1,33 @@
-import React, {useEffect, SetStateAction} from 'react';
+import React, {useEffect, SetStateAction, useState} from 'react';
 import {StyleSheet, TextInput} from 'react-native';
-import { UserProps } from '../types/AppTypes';
-  
-  type InputProps = {
-    setUsers: React.Dispatch<SetStateAction<UserProps[]>>,
-    getUser: Function,
-    search: string
-    setSearch: React.Dispatch<SetStateAction<string>>
-  }
+import {UserProps} from '../types/AppTypes';
+
+type InputProps = {
+  setUsers: React.Dispatch<SetStateAction<UserProps[]>>;
+  getUser: Function;
+};
 
 export const InputUser = (props: InputProps) => {
+  const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (props?.search) {
-        props?.getUser(props?.search);
-      }
-      else
-        props?.setUsers([]);
-    }, 500)
+      if (search) {
+        props?.getUser(search);
+      } else props?.setUsers([]);
+    }, 500);
 
-    return () => clearTimeout(timer)
-  }, [props?.search])
+    return () => clearTimeout(timer);
+  }, [search]);
 
   return (
     <TextInput
       style={styles.input}
-      onChangeText={(val) => props?.setSearch(val)}
-      placeholder='Search Input'
+      onChangeText={val => setSearch(val)}
+      placeholder="Search Input"
       autoCapitalize={'none'}
       autoCorrect={false}
-      value={props?.search}
+      value={search}
     />
   );
 };
