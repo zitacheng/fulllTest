@@ -20,9 +20,13 @@ export function userSetData(
  this is the only one not using async. Reducers are not supposed to have any async calls.
 
 4.A higher-order component is a function that: A - takes a component and returns a new component that has been modified.
+
 5.What is "windowing"? B - a technique to render a small subset of a larger dataset. The goal of windowing is to improve performences by limiting the render of the items visible on screen.
+
 6.Which methods are not usable with React hooks? All of them. These methods were used in class components, and are not compatible with function components.
+
 7.Which status code is not an error? A and D - 200 (successful response) and 204 (successful but no content send in the response)
+
 8.Use Typescript to describe the following function which returns a success message when the request has been successfully sent, returns a code status when the request has failed.
 
 ```
