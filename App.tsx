@@ -18,18 +18,6 @@ import {Header} from './components/Header';
 import {Menu} from './components/Menu';
 import { UserProps } from './types/AppTypes';
 
-// interface CustomResponseHeaders extends Headers {
-//   map: {
-//     'x-ratelimit-reset'?: string;
-//     'x-ratelimit-remaining'?: string;
-//     'x-ratelimit-used'?: string;
-//   }
-// }
-
-// interface CustomResponse extends Response {
-//   headers: CustomResponseHeaders;
-// }
-
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [search, setSearch] = useState<string>('');
@@ -38,9 +26,11 @@ function App(): React.JSX.Element {
   const [users, setUsers] = useState<UserProps[]>([]);
 
 
+  //check the checkbox on card
   const setUserChecked = (user: UserProps) => {
     let idx = users?.findIndex((el) => el.id === user.id);
     
+      // users and user exist
       if (idx != undefined  && idx >= 0 && users) {
         const newArr: UserProps[] = [...users];
         //Uncheck Select All
@@ -55,20 +45,14 @@ function App(): React.JSX.Element {
     }
   }
 
+  
   const getUser = (user: string) => {
-    console.log("user ", user)
       fetch('https://api.github.com/search/users?q=' + user)
       .then((response) => {
-        console.log("response", response.status)
-        // console.log("response", response)
-        // console.log("MAP", response.headers.map['x-ratelimit-reset'])
-        // console.log("MAP", response.headers.map['x-ratelimit-remaining'])
-        // console.log("MAP", response.headers.map['x-ratelimit-used'])
         if (response.status == 200)
           return response; 
         else
           throw response.status;
-          // return response; 
       })
       .then(response => response.json())
       .then(json => {
@@ -78,7 +62,6 @@ function App(): React.JSX.Element {
       })
       .catch(error => {
         Alert.alert('Error on the request', 'You have exceed the rate limit, please try later');
-        console.error(error);
       });
   };
 
